@@ -1,0 +1,72 @@
+{
+  "title": "Atlas économique mondial",
+  "referenceYear": "auto",
+  "historyYears": 10,
+  "maxAgeYears": 6,
+  "levels": [
+    {
+      "id": "countries",
+      "label": "Pays",
+      "available": true,
+      "geometry": "data/geo/countries.geojson",
+      "stats": "data/stats/countries.json",
+      "idProperty": "code",
+      "nameProperty": "name",
+      "maxZoomOnFocus": 5.5
+    },
+    {
+      "id": "regions",
+      "label": "Régions",
+      "available": false,
+      "note": "Bientôt : régions françaises, cantons suisses, États américains…"
+    }
+  ],
+  "indicators": [
+    {
+      "id": "gdp",
+      "label": "PIB",
+      "unit": "Md$",
+      "format": "billions",
+      "ramp": "size",
+      "description": "Produit intérieur brut à prix courants, en milliards de dollars US.",
+      "sources": { "countries": { "provider": "imf", "code": "NGDPD" } }
+    },
+    {
+      "id": "gdp_ppp",
+      "label": "PIB en PPA",
+      "unit": "Md$ PPA",
+      "format": "billions",
+      "ramp": "size",
+      "description": "PIB en parité de pouvoir d'achat, en milliards de dollars internationaux.",
+      "sources": { "countries": { "provider": "imf", "code": "PPPGDP" } }
+    },
+    {
+      "id": "gdp_pc",
+      "label": "PIB par habitant",
+      "unit": "$",
+      "format": "integer",
+      "ramp": "size",
+      "description": "PIB par habitant à prix courants, en dollars US.",
+      "sources": { "countries": { "provider": "imf", "code": "NGDPDPC" } }
+    },
+    {
+      "id": "debt",
+      "label": "Dette publique",
+      "unit": "% du PIB",
+      "format": "percent",
+      "ramp": "debt",
+      "breaks": [30, 45, 60, 75, 90, 120],
+      "description": "Dette brute des administrations publiques, en pourcentage du PIB.",
+      "sources": { "countries": { "provider": "imf", "code": "GGXWDG_NGDP" } }
+    },
+    {
+      "id": "pop",
+      "label": "Population",
+      "unit": "M hab.",
+      "format": "millions",
+      "ramp": "size",
+      "description": "Population, en millions d'habitants.",
+      "sources": { "countries": { "provider": "imf", "code": "LP" } }
+    }
+  ]
+}

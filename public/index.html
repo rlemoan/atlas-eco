@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atlas économique mondial</title>
+<meta name="description" content="Carte interactive des grands indicateurs économiques par pays : PIB, PIB en PPA, PIB par habitant, dette publique et population (source FMI).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="vendor/maplibre-gl.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main class="app">
+  <div id="map" class="map" role="region" aria-label="Carte du monde"></div>
+
+  <section class="panel panel--control" aria-labelledby="app-title">
+    <header class="masthead">
+      <h1 id="app-title" class="masthead__title">Atlas économique mondial</h1>
+      <p class="masthead__meta" id="edition-line">Chargement des données…</p>
+    </header>
+
+    <div class="levels" role="radiogroup" aria-label="Découpage" id="levels"></div>
+
+    <fieldset class="indicators" id="indicators">
+      <legend class="eyebrow">Indicateur</legend>
+    </fieldset>
+  </section>
+
+  <div class="toolbar">
+    <label class="search" for="search">
+      <span class="visually-hidden">Rechercher un pays</span>
+      <input id="search" type="search" list="country-list" placeholder="Rechercher un pays" autocomplete="off">
+      <datalist id="country-list"></datalist>
+    </label>
+    <div class="toolbar__row">
+      <button type="button" class="btn" id="projection-toggle" aria-pressed="false">Globe</button>
+      <button type="button" class="btn" id="reset-view">Vue monde</button>
+    </div>
+  </div>
+
+  <section class="panel panel--legend" aria-labelledby="legend-title">
+    <p class="eyebrow" id="legend-title"></p>
+    <div class="legend" id="legend"></div>
+    <p class="credits" id="credits"></p>
+  </section>
+
+  <aside class="panel panel--detail" id="detail" hidden aria-live="polite" aria-labelledby="detail-name">
+    <div class="detail__head">
+      <h2 class="detail__name" id="detail-name"></h2>
+      <button type="button" class="btn btn--icon" id="detail-close" aria-label="Fermer la fiche">×</button>
+    </div>
+    <p class="detail__rank" id="detail-rank"></p>
+    <dl class="figures" id="detail-figures"></dl>
+    <figure class="spark" id="detail-spark"></figure>
+    <a class="detail__source" id="detail-source" href="#" target="_blank" rel="noopener">Voir la série sur le site du FMI ↗</a>
+  </aside>
+
+  <div class="tip" id="tip" hidden role="tooltip"></div>
+  <p class="status" id="status" hidden></p>
+</main>
+<script src="vendor/maplibre-gl.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

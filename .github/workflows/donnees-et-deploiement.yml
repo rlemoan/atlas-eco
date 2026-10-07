@@ -1,0 +1,62 @@
+name: Données et déploiement
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    # Le 3 de chaque mois à 05:17 UTC. Le FMI publie en avril et en octobre,
+    # avec des révisions ponctuelles entre les deux.
+    - cron: "17 5 3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: atlas
+  cancel-in-progress: false
+
+jobs:
+  donnees:
+    # Les pushes manuels déploient directement ; le calendrier et le bouton
+    # « Run workflow » rafraîchissent d'abord les données.
+    if: github.event_name != 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Récupérer les indicateurs
+        run: python pipeline/build_stats.py
+      - name: Enregistrer si les données ont changé
+        run: |
+          if git diff --quiet -- public/data; then
+            echo "Données inchangées."
+            exit 0
+          fi
+          git config user.name "atlas-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data
+          git commit -m "Données : mise à jour automatique"
+          git push
+
+  deploiement:
+    needs: donnees
+    if: ${{ always() && (needs.donnees.result == 'success' || needs.donnees.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploiement.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - id: deploiement
+        uses: actions/deploy-pages@v4
